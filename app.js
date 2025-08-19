@@ -8,18 +8,20 @@ import { get_runtime, get_url } from './src/util.js'
 
 const app = new Hono()
 
-// 只允许指定域名和本地测试访问
+// 允许的域名列表（需带协议，可自行添加多个）
 const allowedOrigins = [
-    'https://Linux-qitong.top',
-    'https://blog.Linux-qitong.top',
-    'http://localhost:3000', // 供本地调试
+    'https://linux-qitong.top', 
+    'https://blog.linux-qitong.top',  
+    'http://localhost:3000',       // 本地测试用
 ]
 
-// 配置 CORS，只允许指定的域名
+// 配置 CORS，只允许指定域名跨域
 app.use('*', cors({
     origin: (origin) => {
-        if (!origin) return false // 禁止非浏览器请求（如curl）
-        return allowedOrigins.includes(origin)
+        console.log('请求Origin:', origin) // 调试用
+        if (!origin) return allowedOrigins[1] // 允许本地无origin情况
+        if (allowedOrigins.includes(origin)) return origin
+        return '' // 其它域名拒绝跨域
     }
 }))
 
