@@ -8,7 +8,22 @@ import { get_runtime, get_url } from './src/util.js'
 
 const app = new Hono()
 
-app.use('*', cors())
+// 允许的域名列表（需带协议，可自行添加多个）
+const allowedOrigins = [
+    '你的域名', 
+    'http://localhost:3000',       // 本地测试用
+]
+
+// 配置 CORS，只允许指定域名跨域
+app.use('*', cors({
+    origin: (origin) => {
+        console.log('请求Origin:', origin) // 调试用
+        if (!origin) return allowedOrigins[1] // 允许本地无origin情况
+        if (allowedOrigins.includes(origin)) return origin
+        return '' // 其它域名拒绝跨域
+    }
+}))
+
 app.use('*', logger())
 app.get('/api', api)
 app.get('/test', handler)
