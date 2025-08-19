@@ -8,7 +8,21 @@ import { get_runtime, get_url } from './src/util.js'
 
 const app = new Hono()
 
-app.use('*', cors())
+// 只允许指定域名和本地测试访问
+const allowedOrigins = [
+    'https://Linux-qitong.top',
+    'https://blog.Linux-qitong.top',
+    'http://localhost:3000', // 供本地调试
+]
+
+// 配置 CORS，只允许指定的域名
+app.use('*', cors({
+    origin: (origin) => {
+        if (!origin) return false // 禁止非浏览器请求（如curl）
+        return allowedOrigins.includes(origin)
+    }
+}))
+
 app.use('*', logger())
 app.get('/api', api)
 app.get('/test', handler)
