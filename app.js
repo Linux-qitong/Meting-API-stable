@@ -12,7 +12,7 @@ const app = new Hono()
 const allowedOrigins = [
     'https://linux-qitong.top', 
     'https://blog.linux-qitong.top',  
-    'http://localhost:4321',       // 本地测试用
+    'http://localhost:4000',       // 本地测试用
 ]
 
 // 配置 CORS，只允许指定域名跨域
